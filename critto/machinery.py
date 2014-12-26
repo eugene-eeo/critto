@@ -3,7 +3,7 @@ from critto.meta import MetaParser
 
 
 class Parser(MetaParser):
-    EXPR = '(.+?)\W*(==|!=)\W*(.+?)'
+    EXPR = r'(.+?)\W*(==|!=)\W*(.+?)'
     COND = r'\W*#\[if %s\]' % EXPR
     FLAG = r'\W*#\[(.+)\]'
 
