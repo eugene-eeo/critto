@@ -1,9 +1,12 @@
 Critto
 ======
 
-Critto is a file preprocessor that does line modifications.
-It is made to be very lightweight and also extensible via
-a callback based API. A simple example::
+Critto is a preprocessor library that does line modifications.
+Basically, it allows you to modify each line and then join
+them together based on context. This model is very easy to
+program against and can be very powerful but simple at the
+same time. It is made to be very lightweight and also easily
+extensible via a callback based API. A simple example::
 
     import os
     from critto import process
