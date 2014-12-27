@@ -10,13 +10,13 @@ class Preprocessor(MetaParser):
     cond_re = ignore_ws(r'#\[if (.+?)=(.+?)\]')
     endc_re = ignore_ws(r'#\[endif\]')
     flag_re = ignore_ws(r'#\[(.+)\]')
-    any_re  = r'(.+)'
+    any_re  = r'(.*)'
 
-    def __init__(self, conds={}, flags={}):
+    def __init__(self, conds=None, flags=None):
         MetaParser.__init__(self)
         self.stack = [True]
-        self.flags = flags.copy()
-        self.conds = conds.copy()
+        self.flags = {} if flags is None else flags
+        self.conds = {} if conds is None else conds
         self.setup()
 
     def setup(self):

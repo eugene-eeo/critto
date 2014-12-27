@@ -13,7 +13,7 @@ class MetaParser(object):
             m = match(regex, line)
             if m and m.end() == len(line):
                 return callback(m)
-        raise ValueError
+        raise ValueError('No match for %s' % line)
 
     def parse(self, lines):
         for item in lines:
