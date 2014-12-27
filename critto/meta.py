@@ -13,13 +13,18 @@ class MetaParser(object):
             m = match(regex, line)
             if m and m.end() == len(line):
                 return callback(m)
-        raise ValueError('No match for %s' % line)
+        raise ValueError
 
     def parse(self, lines):
-        for item in lines:
-            res = self.parse_line(item)
-            if res is not None:
-                yield res
+        for idx, item in enumerate(lines):
+            try:
+                res = self.parse_line(item)
+                if res is not None:
+                    yield res
+            except ValueError as exc:
+                msg = 'Invalid text "%s" (line: %d)' % (item, idx)
+                exc.args = (msg,)
+                raise exc
 
     def expand(self, text):
         lines = text.splitlines()

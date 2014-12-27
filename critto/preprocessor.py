@@ -34,8 +34,7 @@ class Preprocessor(MetaParser):
     def handle_cond(self, match):
         if self.last_cond:
             cond, value = match.groups()
-            value = loads(value)
-            self.stack.append(self.conds[cond]() == value)
+            self.stack.append(self.conds[cond]() == loads(value))
 
     def handle_endc(self, match):
         self.stack.pop()
