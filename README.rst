@@ -21,9 +21,9 @@ else, like Windows::
     code here...
 
 The code required to do it is very minimal. Currently only
-feature flags and simple equality conditionals are supported.
-Expressions are parsed using JSON. I intend to keep the API
-and core tiny.
+feature flags and simple equality conditionals are supported
+by default. Expressions are parsed using JSON. I intend to
+keep the API and core tiny.
 
 .. code-block:: python
 

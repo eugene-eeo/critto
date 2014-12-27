@@ -55,3 +55,7 @@ class Preprocessor(MetaParser):
     @property
     def last_cond(self):
         return self.stack[-1]
+
+    def parse(self, *args, **kwargs):
+        self.stack = [True]
+        return MetaParser.parse(self, *args, **kwargs)
