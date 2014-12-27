@@ -3,11 +3,9 @@ Critto
 
 Critto is a preprocessor library that does line modifications.
 Basically, it allows you to modify each line and then join
-them together based on context. This model is very easy to
-program against and can be very powerful but simple at the
-same time. It is made to be very lightweight and also easily
-extensible via a callback based API. That is, given a piece
-of text:
+them together based on context. It is made to be very lightweight
+and also easily extensible via a callback based API. That is,
+given a piece of text:
 
 .. code-block:: cfg
 
@@ -22,7 +20,10 @@ else, like Windows::
 
     code here...
 
-The code required to do it is very minimal:
+The code required to do it is very minimal. Currently only
+feature flags and simple equality conditionals are supported.
+Expressions are parsed using JSON. I intend to keep the API
+and core tiny.
 
 .. code-block:: python
 
@@ -33,5 +34,6 @@ The code required to do it is very minimal:
            conds=dict(os=lambda: os.name),
            flags=dict(enable=do_something))
 
-The preprocessor syntax is inspired by Rust. Currently only
-if-statements and "feature flags" are implemented.
+Preprocessor syntax is inspired by Rust. The aim of this
+project is to help simplify the creation of preprocessors
+where using template engines are overkill and not necessary.
