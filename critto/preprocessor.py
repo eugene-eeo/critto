@@ -1,3 +1,4 @@
+from functools import partial
 from json import loads
 from critto.meta import MetaParser
 
@@ -7,27 +8,12 @@ def ignore_ws(regex):
 
 
 class Preprocessor(MetaParser):
-    cond_re = ignore_ws(r'#\[if (.+?)=(.+?)\]')
-    endc_re = ignore_ws(r'#\[endif\]')
-    flag_re = ignore_ws(r'#\[(.+)\]')
-    any_re  = r'(.*)'
-
     def __init__(self, conds=None, flags=None):
         MetaParser.__init__(self)
         self.stack = [True]
         self.flags = {} if flags is None else flags
         self.conds = {} if conds is None else conds
         self.setup()
-
-    def setup(self):
-        pairs = [
-            (self.cond_re, self.handle_cond),
-            (self.endc_re, self.handle_endc),
-            (self.flag_re, self.handle_flag),
-            (self.any_re, self.handle_any),
-            ]
-        for re, cb in pairs:
-            self.register(re, cb)
 
     def register_flag(self, flag, callback):
         self.flags[flag] = callback
@@ -59,3 +45,14 @@ class Preprocessor(MetaParser):
     def parse(self, *args, **kwargs):
         self.stack = [True]
         return MetaParser.parse(self, *args, **kwargs)
+
+    pairs = [
+        (ignore_ws(r'#\[if (.+?)=(.+?)\]'), handle_cond),
+        (ignore_ws(r'#\[endif\]'), handle_endc),
+        (ignore_ws(r'#\[(.+)\]'), handle_flag),
+        (r'(.*)',  handle_any),
+        ]
+
+    def setup(self):
+        for re, cb in self.pairs:
+            self.register(re, partial(cb, self))
