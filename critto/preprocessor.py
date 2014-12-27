@@ -3,6 +3,12 @@ from json import loads
 from critto.meta import MetaParser
 
 
+def defined_or(value, cb):
+    if value is None:
+        return cb()
+    return value
+
+
 def ignore_ws(regex):
     return '\W*%s\W*' % regex
 
@@ -11,8 +17,8 @@ class Preprocessor(MetaParser):
     def __init__(self, conds=None, flags=None):
         MetaParser.__init__(self)
         self.stack = [True]
-        self.flags = {} if flags is None else flags
-        self.conds = {} if conds is None else conds
+        self.conds = defined_or(conds, dict)
+        self.flags = defined_or(flags, dict)
         self.setup()
 
     def register_flag(self, flag, callback):
