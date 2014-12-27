@@ -11,10 +11,12 @@ extensible via a callback based API. A simple example::
     import os
     from critto import process
 
-    process("#[if os==posix]"
-            "You're running *nix!"
-            "#[endif]",
-            variables={'os': lambda: os.name},)
+    process('#[enable]\n'
+            '#[if os="posix"]\n'
+            "You're running *nix!\n"
+            '#[endif]',
+            conds={'os': lambda: os.name},
+            flags={'enable': lambda: something})
 
 The preprocessor syntax is inspired by Rust. Currently only
 if-statements and "feature flags" are implemented.
