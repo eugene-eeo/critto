@@ -22,7 +22,7 @@ class MetaParser(object):
                 if res is not None:
                     yield res
             except ValueError as exc:
-                msg = 'Invalid text "%s" (line: %d)' % (item, idx)
+                msg = 'Invalid text "%s" (line %d)' % (item, idx)
                 exc.args = (msg,)
                 raise exc
 

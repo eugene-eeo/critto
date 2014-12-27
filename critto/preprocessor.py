@@ -51,7 +51,7 @@ class Preprocessor(MetaParser):
         self.stack = [True]
         return MetaParser.parse(self, *args, **kwargs)
 
-    pairs = [
+    defaults = [
         (ignore_ws(r'#\[if (.+?)=(.+?)\]'), handle_cond),
         (ignore_ws(r'#\[endif\]'), handle_endc),
         (ignore_ws(r'#\[(.+)\]'), handle_flag),
@@ -59,5 +59,5 @@ class Preprocessor(MetaParser):
         ]
 
     def setup(self):
-        for re, cb in self.pairs:
+        for re, cb in self.defaults:
             self.register(re, bind(cb, self))
