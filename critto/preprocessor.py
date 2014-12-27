@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial as bind
 from json import loads
 from critto.meta import MetaParser
 
@@ -55,4 +55,4 @@ class Preprocessor(MetaParser):
 
     def setup(self):
         for re, cb in self.pairs:
-            self.register(re, partial(cb, self))
+            self.register(re, bind(cb, self))
