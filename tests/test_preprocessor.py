@@ -26,3 +26,8 @@ class PreprocessorTest(TestCase):
         self.preproc.register_cond('cond', lambda: self.ctx.append(2))
         self.preproc.expand('\t#[flag]  \n#[if cond=null]\n #[endif]')
         assert self.ctx == [1, 2]
+
+    def test_reset_on_parse(self):
+        _ = self.preproc.expand('#[if cond=null]')
+        t = self.preproc.expand('#[if cond=1]\nyes!')
+        assert t == 'yes!'
