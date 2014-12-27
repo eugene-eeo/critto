@@ -8,7 +8,7 @@ class MetaParser(object):
     def register(self, regex, callback):
         self.patterns.append((regex, callback))
 
-    def handle_line(self, line):
+    def parse_line(self, line):
         for regex, callback in self.patterns:
             m = match(regex, line)
             if m and m.end() == len(line):
@@ -17,7 +17,7 @@ class MetaParser(object):
 
     def parse(self, lines):
         for item in lines:
-            res = self.handle_line(item)
+            res = self.parse_line(item)
             if res is not None:
                 yield res
 
