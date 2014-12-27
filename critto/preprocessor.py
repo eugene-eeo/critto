@@ -40,20 +40,18 @@ class Preprocessor(MetaParser):
         self.flags[flag]()
 
     def handle_cond(self, match):
-        if self.stack[-1]:
+        if self.last_cond:
             cond, value = match.groups()
             value = loads(value)
             self.stack.append(self.conds[cond]() == value)
-
-    def handle_elif(self, match):
-        if not self.stack[-1]:
-            cond, value = match.groups()
-            value = loads(value)
-            self.stack[-1] = self.conds[cond]() == value
 
     def handle_endc(self, match):
         self.stack.pop()
 
     def handle_any(self, match):
-        if self.stack[-1]:
+        if self.last_cond:
             return match.group()
+
+    @property
+    def last_cond(self):
+        return self.stack[-1]
