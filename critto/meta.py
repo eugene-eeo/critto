@@ -1,18 +1,15 @@
 from re import match
-from collections import deque
 
 
 class MetaParser(object):
-    patterns = []
-
     def __init__(self):
-        self.regexes = deque(self.patterns)
+        self.patterns = []
 
     def register(self, regex, callback):
-        self.regexes.appendleft((regex, callback))
+        self.patterns.append((regex, callback))
 
-    def handle(self, line):
-        for regex, callback in self.regexes:
+    def handle_line(self, line):
+        for regex, callback in self.patterns:
             m = match(regex, line)
             if m and m.end() == len(line):
                 return callback(m)
@@ -20,7 +17,10 @@ class MetaParser(object):
 
     def parse(self, lines):
         for item in lines:
-            res = self.handle(item)
-            if res is None:
-                continue
-            yield res
+            res = self.handle_line(item)
+            if res is not None:
+                yield res
+
+    def expand(self, text):
+        lines = text.splitlines()
+        return '\n'.join(self.parse(lines))
