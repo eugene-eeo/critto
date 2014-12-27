@@ -12,11 +12,11 @@ class Preprocessor(MetaParser):
     flag_re = ignore_ws(r'#\[(.+)\]')
     any_re  = r'(.+)'
 
-    def __init__(self, *args, **kwargs):
-        MetaParser.__init__(self, *args, **kwargs)
+    def __init__(self, conds={}, flags={}):
+        MetaParser.__init__(self)
         self.stack = [True]
-        self.flags = {}
-        self.conds = {}
+        self.flags = flags.copy()
+        self.conds = conds.copy()
         self.setup()
 
     def setup(self):
