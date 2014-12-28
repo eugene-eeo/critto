@@ -49,7 +49,7 @@ class IfCond(ROpt):
 
 
 class EndBlock(ROpt):
-    regex = ignore_ws(r'#\[end(if|block)\]')
+    regex = ignore_ws(r'#\[endif\]')
 
     def __call__(self, ctx, match):
         ctx.stack.pop()
