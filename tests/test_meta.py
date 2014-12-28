@@ -1,28 +1,26 @@
 from unittest import TestCase
 from critto.meta import MetaParser
+from critto.ropt import ROpt
+
+
+class ThisThatROpt(ROpt):
+    regex = r'th(is|at)'
+
+    def __call__(self, m):
+        return 'yes'
 
 
 class MetaParserTest(TestCase):
     def setUp(self):
-        self.regex = 'th(is|at)'
-        self.handler = lambda m: self.store.append(m.group(1))
-
-        self.store = []
         self.parser = MetaParser()
-        self.parser.register(self.regex, self.handler)
 
-    def test_parse_valid(self):
-        lines = ['this', 'that']
-        assert list(self.parser.parse(lines)) == []
-        assert self.store == ['is', 'at']
+    def test_parse(self):
+        self.parser.register(ThisThatROpt)
+        t = self.parser.parse(['this', 'that'])
+        assert list(t) == ['yes', 'yes']
 
-    def test_parse_invalid(self):
-        lines = ['this', 'those']
+    def test_invalid(self):
         self.assertRaises(
             ValueError,
-            lambda: list(self.parser.parse(lines)),
+            lambda: list(self.parser.parse(['this'])),
         )
-
-    def test_expand(self):
-        assert self.parser.expand('') == ''
-        assert self.parser.expand('this\nthat') == ''

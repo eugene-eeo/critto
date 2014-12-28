@@ -4,30 +4,23 @@ from critto.preprocessor import Preprocessor
 
 class PreprocessorTest(TestCase):
     def setUp(self):
-        self.ctx = []
         self.preproc = Preprocessor()
-        self.preproc.register_flag('flag', lambda: self.ctx.append(1))
-        self.preproc.register_cond('cond', lambda: 1)
 
-    def test_flag(self):
-        self.preproc.expand('#[flag]')
-        assert self.ctx == [1]
-
-    def test_cond(self):
-        t = self.preproc.expand('#[if cond=1]\nyes\n#[endif]')
+    def test_expand(self):
+        def cb():
+            self.preproc.add_cond('cond', lambda: True)
+        self.preproc.add_flag('enable', cb)
+        t = self.preproc.expand(open('tests/assets/basic.txt').read())
         assert t == 'yes'
 
-    def test_nested_cond(self):
-        text = '#[if cond=2]\n#[if cond=1]\nyes\n#[endif]\n#[endif]'
-        t = self.preproc.expand(text)
-        assert t == ''
+    def test_nested(self):
+        self.preproc.add_cond('cond1', lambda: None)
+        self.preproc.add_cond('cond2', lambda: 'string')
+        t = self.preproc.expand(open('tests/assets/nested.txt').read())
+        assert t == 'yes'
 
-    def test_whitespace_ignored(self):
-        self.preproc.register_cond('cond', lambda: self.ctx.append(2))
-        self.preproc.expand('\t#[flag]  \n#[if cond=null]\n #[endif]')
-        assert self.ctx == [1, 2]
-
-    def test_reset_on_parse(self):
-        _ = self.preproc.expand('#[if cond=null]')
-        t = self.preproc.expand('#[if cond=1]\nyes!')
-        assert t == 'yes!'
+    def test_defined(self):
+        self.preproc.add_cond('cond1', lambda: 1)
+        self.preproc.add_cond('cond2', lambda: 1)
+        t = self.preproc.expand(open('tests/assets/defined.txt').read())
+        assert t == 'yes'

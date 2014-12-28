@@ -1,63 +1,34 @@
-from functools import partial as bind
-from json import loads
 from critto.meta import MetaParser
-
-
-def defined_or(value, cb):
-    if value is None:
-        return cb()
-    return value
-
-
-def ignore_ws(regex):
-    return '\W*%s\W*' % regex
+from critto.objects import IfName, IfCond, Flag, Any, EndBlock
+from critto.ropt import ROpt
 
 
 class Preprocessor(MetaParser):
-    def __init__(self, conds=None, flags=None):
-        MetaParser.__init__(self)
-        self.stack = [True]
-        self.conds = defined_or(conds, dict)
-        self.flags = defined_or(flags, dict)
-        self.setup()
-
-    def register_flag(self, flag, callback):
-        self.flags[flag] = callback
-
-    def register_cond(self, cond, callback):
-        self.conds[cond] = callback
-
-    def handle_flag(self, match):
-        flag = match.group(1)
-        self.flags[flag]()
-
-    def handle_cond(self, match):
-        if self.last_cond:
-            cond, value = match.groups()
-            self.stack.append(self.conds[cond]() == loads(value))
-
-    def handle_endc(self, match):
-        self.stack.pop()
-
-    def handle_any(self, match):
-        if self.last_cond:
-            return match.group()
-
-    @property
-    def last_cond(self):
-        return self.stack[-1]
-
-    def parse(self, *args, **kwargs):
-        self.stack = [True]
-        return MetaParser.parse(self, *args, **kwargs)
-
     defaults = [
-        (ignore_ws(r'#\[if (.+?)=(.+?)\]'), handle_cond),
-        (ignore_ws(r'#\[endif\]'), handle_endc),
-        (ignore_ws(r'#\[(.+)\]'), handle_flag),
-        (r'(.*)',  handle_any),
-        ]
+        EndBlock,
+        IfCond,
+        IfName,
+        Flag,
+        Any,
+    ]
 
-    def setup(self):
-        for re, cb in self.defaults:
-            self.register(re, bind(cb, self))
+    def __init__(self):
+        MetaParser.__init__(self)
+        self.pats = [self.wrap(pat) for pat in self.pats]
+        self.flags = {}
+        self.conds = {}
+        self.stack = [True]
+
+    def add_flag(self, flag, cb):
+        self.flags[flag] = cb
+
+    def add_cond(self, cond, cb):
+        self.conds[cond] = cb
+
+    def wrap(self, ropt):
+        class TmpROpt(ropt.__class__):
+            regex = ropt.regex
+
+            def __call__(ins, match):
+                return ropt(self, match)
+        return TmpROpt()

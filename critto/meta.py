@@ -1,30 +1,28 @@
-from re import match
+from collections import deque
 
 
 class MetaParser(object):
+    defaults = []
+
     def __init__(self):
-        self.patterns = []
+        self.pats = deque([ropt() for ropt in self.defaults])
 
-    def register(self, regex, callback):
-        self.patterns.append((regex, callback))
+    def register(self, ropt):
+        self.pats.appendleft(ropt())
 
-    def parse_line(self, line):
-        for regex, callback in self.patterns:
-            m = match(regex, line)
-            if m and m.end() == len(line):
-                return callback(m)
+    def handle(self, line):
+        length = len(line)
+        for ropt in self.pats:
+            match = ropt.matches(line)
+            if match:
+                return ropt(match)
         raise ValueError
 
     def parse(self, lines):
-        for idx, item in enumerate(lines):
-            try:
-                res = self.parse_line(item)
-                if res is not None:
-                    yield res
-            except ValueError as exc:
-                msg = 'Invalid text "%s" (line %d)' % (item, idx)
-                exc.args = (msg,)
-                raise exc
+        for item in lines:
+            res = self.handle(item)
+            if res is not None:
+                yield res
 
     def expand(self, text):
         lines = text.splitlines()

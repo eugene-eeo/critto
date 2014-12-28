@@ -1,4 +1,0 @@
-#[enable-cond]
-#[if cond="this"]
-Hello World!
-#[endif]
