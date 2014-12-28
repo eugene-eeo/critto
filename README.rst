@@ -9,10 +9,10 @@ given a piece of text:
 
 .. code-block:: cfg
 
-    #[enable]
-    #[if os="posix"]
+    #![enable]
+    #![if os="posix"]
     code here...
-    #[endif]
+    #![endif]
 
 Critto can expand it to the following, if you are running
 a -nix OS, or nothing at all if you are running something

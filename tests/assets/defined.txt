@@ -1,5 +1,5 @@
-#[if cond1]
-#[if cond2]
+#![if cond1]
+#![if cond2]
 yes
-#[endif]
-#[endif]
+#![endif]
+#![endif]
