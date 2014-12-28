@@ -1,4 +1,4 @@
-from functools import partial as bind
+from functools import partial
 from json import loads
 from critto.meta import MetaParser
 from critto.ropt import ROpt
@@ -21,14 +21,16 @@ def scoped(func):
 
 class Preprocessor(MetaParser):
     def __init__(self):
-        self.defaults = [self.wrap(r) for r in self.defaults]
-        MetaParser.__init__(self)
+        self.pats = [
+            ROpt(tag('endif'), self.handle_endif),
+            ROpt(tag('if %s' % NAME), self.handle_defined),
+            ROpt(tag('if %s=(.+?)' % NAME), self.handle_cond),
+            ROpt(tag(NAME), self.handle_flag),
+            ROpt('(.+)', self.handle_any),
+        ]
         self.flags = {}
         self.conds = {}
         self.stack = [True]
-
-    def wrap(self, ropt):
-        return ROpt(ropt.regex, bind(ropt.cb, self))
 
     def add_flag(self, flag, cb):
         self.flags[flag] = cb
@@ -57,10 +59,6 @@ class Preprocessor(MetaParser):
         if self.stack[-1]:
             return match.group()
 
-    defaults = [
-        ROpt(tag('endif'), handle_endif),
-        ROpt(tag('if %s' % NAME), handle_defined),
-        ROpt(tag('if %s=(.+?)' % NAME), handle_cond),
-        ROpt(tag(NAME), handle_flag),
-        ROpt('(.+)', handle_any),
-    ]
+    def parse(self, *args, **kwargs):
+        self.stack = [True]
+        return MetaParser.parse(self, *args, **kwargs)

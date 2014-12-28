@@ -1,14 +1,11 @@
-from collections import deque
-
-
 class MetaParser(object):
     defaults = []
 
     def __init__(self):
-        self.pats = deque(self.defaults)
+        self.pats = self.defaults[:]
 
     def register(self, ropt):
-        self.pats.appendleft(ropt)
+        self.pats.insert(0, ropt)
 
     def handle(self, line):
         length = len(line)
