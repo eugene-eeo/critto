@@ -21,11 +21,14 @@ def scoped(func):
 
 class Preprocessor(MetaParser):
     def __init__(self):
-        self.defaults = [ROpt(r.regex, bind(r.cb, self)) for r in self.defaults]
+        self.defaults = [self.wrap(r) for r in self.defaults]
         MetaParser.__init__(self)
         self.flags = {}
         self.conds = {}
         self.stack = [True]
+
+    def wrap(self, ropt):
+        return ROpt(ropt.regex, bind(ropt.cb, self))
 
     def add_flag(self, flag, cb):
         self.flags[flag] = cb
