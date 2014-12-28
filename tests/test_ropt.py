@@ -2,16 +2,9 @@ from unittest import TestCase
 from critto.ropt import ROpt
 
 
-class MetaRegex(ROpt):
-    regex = r'(meta-)*regex'
-
-    def __call__(self):
-        return 0
-
-
 class ROptTest(TestCase):
     def setUp(self):
-        self.ropt = MetaRegex()
+        self.ropt = ROpt('(meta-)*regex', lambda: 0)
 
     def test_matches_positive(self):
         assert self.ropt.matches('meta-regex')

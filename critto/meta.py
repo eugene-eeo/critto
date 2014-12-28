@@ -5,10 +5,10 @@ class MetaParser(object):
     defaults = []
 
     def __init__(self):
-        self.pats = deque([ropt() for ropt in self.defaults])
+        self.pats = deque(self.defaults)
 
     def register(self, ropt):
-        self.pats.appendleft(ropt())
+        self.pats.appendleft(ropt)
 
     def handle(self, line):
         length = len(line)

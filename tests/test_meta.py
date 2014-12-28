@@ -3,19 +3,12 @@ from critto.meta import MetaParser
 from critto.ropt import ROpt
 
 
-class ThisThatROpt(ROpt):
-    regex = r'th(is|at)'
-
-    def __call__(self, m):
-        return 'yes'
-
-
 class MetaParserTest(TestCase):
     def setUp(self):
         self.parser = MetaParser()
 
     def test_parse(self):
-        self.parser.register(ThisThatROpt)
+        self.parser.register(ROpt('th(is|at)', lambda m: 'yes'))
         t = self.parser.parse(['this', 'that'])
         assert list(t) == ['yes', 'yes']
 

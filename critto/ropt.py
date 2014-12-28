@@ -2,10 +2,10 @@ from re import compile
 
 
 class ROpt(object):
-    regex = None
-
-    def __init__(self):
-        self.compiled = compile(self.regex)
+    def __init__(self, regex, cb):
+        self.regex = regex
+        self.compiled = compile(regex)
+        self.cb = cb
 
     def matches(self, text):
         m = self.compiled.match(text)
