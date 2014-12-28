@@ -8,7 +8,6 @@ class MetaParser(object):
         self.pats.insert(0, ropt)
 
     def handle(self, line):
-        length = len(line)
         for ropt in self.pats:
             match = ropt.matches(line)
             if match:

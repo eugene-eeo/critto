@@ -2,10 +2,10 @@ from json import loads
 
 
 def scoped(func):
-    def function(self, match):
-        if self.stack[-1]:
-            return self.stack.append(func(self, match))
-        self.stack.append(False)
+    def function(ctx, match):
+        if ctx.stack[-1]:
+            return ctx.stack.append(func(ctx, match))
+        ctx.stack.append(False)
     return function
 
 
@@ -33,4 +33,3 @@ def flag(ctx, match):
 def text(ctx, match):
     if ctx.stack[-1]:
         return match.group()
-
