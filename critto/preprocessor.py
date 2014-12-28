@@ -19,15 +19,44 @@ def scoped(func):
     return function
 
 
+def endif(ctx, match):
+    ctx.stack.pop()
+
+
+@scoped
+def defined(ctx, match):
+    name = match.group(1)
+    return name in ctx.conds
+
+
+@scoped
+def cond(ctx, match):
+    name, val = match.groups()
+    return ctx.conds[name]() == loads(val)
+
+
+def flag(ctx, match):
+    name = match.group(1)
+    return ctx.flags[name]()
+
+
+def text(ctx, match):
+    if ctx.stack[-1]:
+        return match.group()
+
+
 class Preprocessor(MetaParser):
+    defaults = [
+        ROpt(tag('endif'), endif),
+        ROpt(tag('if %s' % NAME), defined),
+        ROpt(tag('if %s=(.+?)' % NAME), cond),
+        ROpt(tag(NAME), flag),
+        ROpt('(.+)', text),
+    ]
+
     def __init__(self):
-        self.pats = [
-            ROpt(tag('endif'), self.handle_endif),
-            ROpt(tag('if %s' % NAME), self.handle_defined),
-            ROpt(tag('if %s=(.+?)' % NAME), self.handle_cond),
-            ROpt(tag(NAME), self.handle_flag),
-            ROpt('(.+)', self.handle_any),
-        ]
+        self.defaults = [self.wrap(t) for t in self.defaults]
+        MetaParser.__init__(self)
         self.flags = {}
         self.conds = {}
         self.stack = [True]
@@ -38,27 +67,9 @@ class Preprocessor(MetaParser):
     def add_cond(self, cond, cb):
         self.conds[cond] = cb
 
-    def handle_endif(self, match):
-        self.stack.pop()
-
-    @scoped
-    def handle_defined(self, match):
-        name = match.group(1)
-        return name in self.conds
-
-    @scoped
-    def handle_cond(self, match):
-        name, value = match.groups()
-        return self.conds[name]() == loads(value)
-
-    def handle_flag(self, match):
-        name = match.group(1)
-        self.flags[name]()
-
-    def handle_any(self, match):
-        if self.stack[-1]:
-            return match.group()
-
     def parse(self, *args, **kwargs):
         self.stack = [True]
         return MetaParser.parse(self, *args, **kwargs)
+
+    def wrap(self, ropt):
+        return ROpt(ropt.regex, partial(ropt.cb, self))
