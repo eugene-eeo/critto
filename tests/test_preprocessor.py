@@ -1,5 +1,6 @@
+from re import match
 from unittest import TestCase
-from critto.preprocessor import Preprocessor
+from critto.preprocessor import Preprocessor, NAME
 
 
 class PreprocessorTest(TestCase):
@@ -24,3 +25,16 @@ class PreprocessorTest(TestCase):
         self.preproc.add_cond('cond2', lambda: 1)
         t = self.preproc.expand(open('tests/assets/defined.txt').read())
         assert t == 'yes'
+
+
+class RegexTest(TestCase):
+    def test_name(self):
+        assert match(NAME, 'na-e')
+        assert match(NAME, 'B3a_')
+        assert match(NAME, '$n3e')
+        assert match(NAME, '_de')
+
+    def test_name_invalid(self):
+        assert not match(NAME, '123')
+        assert not match(NAME, '#ab')
+        assert not match(NAME, '-ab')

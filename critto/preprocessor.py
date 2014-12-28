@@ -4,7 +4,7 @@ from critto.ropt import ROpt
 from critto.constructs import endif, defined, cond, flag, text
 
 
-NAME = r'([$\w][\w0-9_-]+)'
+NAME = r'([A-Za-z_$][\w_-]+)'
 
 
 def tag(regex):
