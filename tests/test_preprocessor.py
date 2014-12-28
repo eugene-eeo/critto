@@ -4,7 +4,7 @@ from critto.preprocessor import Preprocessor
 
 class PreprocessorTest(TestCase):
     def setUp(self):
-        self.preproc = Preprocessor()
+        self.preproc = Preprocessor({}, {})
 
     def test_expand(self):
         def cb():

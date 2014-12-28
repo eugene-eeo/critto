@@ -20,11 +20,11 @@ class Preprocessor(MetaParser):
         ROpt('(.+)', text),
     ]
 
-    def __init__(self):
+    def __init__(self, flags, conds):
         self.defaults = [self.wrap(t) for t in self.defaults]
         MetaParser.__init__(self)
-        self.flags = {}
-        self.conds = {}
+        self.flags = flags
+        self.conds = conds
         self.stack = [True]
 
     def add_flag(self, flag, cb):
