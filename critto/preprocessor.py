@@ -33,9 +33,5 @@ class Preprocessor(MetaParser):
     def add_cond(self, cond, cb):
         self.conds[cond] = cb
 
-    def parse(self, *args, **kwargs):
-        self.stack = [True]
-        return MetaParser.parse(self, *args, **kwargs)
-
     def wrap(self, ropt):
         return ROpt(ropt.regex, partial(ropt.cb, self))
