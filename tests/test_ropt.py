@@ -4,7 +4,7 @@ from critto.ropt import ROpt
 
 class ROptTest(TestCase):
     def setUp(self):
-        self.ropt = ROpt('(meta-)*regex', lambda: 0)
+        self.ropt = ROpt('(meta-)*regex', lambda x: x)
 
     def test_matches_positive(self):
         assert self.ropt.matches('meta-regex')
@@ -15,4 +15,8 @@ class ROptTest(TestCase):
         assert not self.ropt.matches('regex ')
 
     def test_callback(self):
-        assert self.ropt() == 0
+        assert self.ropt(0) == 0
+
+    def test_bind(self):
+        ropt = self.ropt.bind(1)
+        assert ropt() == 1

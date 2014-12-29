@@ -1,4 +1,3 @@
-from functools import partial
 from critto.meta import MetaParser
 from critto.ropt import ROpt
 from critto.constructs import endif, defined, cond, flag, text
@@ -21,7 +20,7 @@ class Preprocessor(MetaParser):
     ]
 
     def __init__(self, flags, conds):
-        self.defaults = [self.wrap(t) for t in self.defaults]
+        self.defaults = [t.bind(self) for t in self.defaults]
         MetaParser.__init__(self)
         self.flags = flags
         self.conds = conds
@@ -32,6 +31,3 @@ class Preprocessor(MetaParser):
 
     def add_cond(self, name, func):
         self.conds[name] = func
-
-    def wrap(self, ropt):
-        return ROpt(ropt.regex, partial(ropt, self))
