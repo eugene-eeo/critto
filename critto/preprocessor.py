@@ -7,7 +7,7 @@ NAME = r'([A-Za-z_$][\w_-]+)'
 
 
 def tag(regex):
-    return r'\W*#!\[%s\]\W*' % regex
+    return r'\s*#!\[%s\]\s*' % regex
 
 
 class Preprocessor(MetaParser):
