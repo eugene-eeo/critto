@@ -21,6 +21,6 @@ class ROpt(object):
 
     def bind(self, instance):
         return self.__class__(
-                self.regex,
-                partial(self.callback, instance),
-            )
+            self.regex,
+            partial(self.callback, instance),
+        )
