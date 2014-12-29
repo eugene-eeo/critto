@@ -9,7 +9,7 @@ def scoped(func):
     return function
 
 
-def endif(ctx, match):
+def endif(ctx, _):
     ctx.stack.pop()
 
 
