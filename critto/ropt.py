@@ -24,3 +24,9 @@ class ROpt(object):
             self.regex,
             partial(self.callback, instance),
         )
+
+
+def ropt(regex):
+    def wrapper(fn):
+        return ROpt(regex, fn)
+    return wrapper

@@ -3,20 +3,13 @@ from critto.meta import MetaParser
 from critto.ropt import ROpt
 
 
-NAME = r'([A-Za-z_$][\w_-]+)'
-
-
-def tag(regex):
-    return r'\s*#!\[%s\]\s*' % regex
-
-
 class Preprocessor(MetaParser):
     defaults = [
-        ROpt(tag('endif'), endif),
-        ROpt(tag('if %s' % NAME), defined),
-        ROpt(tag('if %s=(.+?)' % NAME), cond),
-        ROpt(tag(NAME), flag),
-        ROpt('(.+)', text),
+        endif,
+        defined,
+        cond,
+        flag,
+        text
     ]
 
     def __init__(self, flags, conds):

@@ -1,6 +1,7 @@
 from re import match
 from unittest import TestCase
-from critto.preprocessor import Preprocessor, NAME
+from critto.preprocessor import Preprocessor
+from critto.constructs import NAME
 
 
 class PreprocessorTest(TestCase):
