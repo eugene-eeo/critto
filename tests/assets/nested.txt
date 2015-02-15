@@ -1,7 +1,7 @@
 #![if cond1=1]
-#![if cond2=0]
+  #![if cond2=0]
 no
-#![endif]
+  #![endif]
 #![endif]
 #![if cond1=null]
 yes
