@@ -24,3 +24,10 @@ class Preprocessor(MetaParser):
 
     def add_cond(self, name, func):
         self.conds[name] = func
+
+    @property
+    def last_cond(self):
+        return self.stack[-1]
+
+    def push(self, cond):
+        self.stack.append(cond)

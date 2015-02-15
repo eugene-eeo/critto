@@ -11,9 +11,8 @@ def tag(regex):
 
 def scoped(func):
     def function(ctx, match):
-        if ctx.stack[-1]:
-            return ctx.stack.append(func(ctx, match))
-        ctx.stack.append(False)
+        ctx.push(func(ctx, match) if ctx.last_cond else
+                 False)
     return function
 
 
