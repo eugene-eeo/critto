@@ -5,11 +5,8 @@ from re import compile as rcompile
 class ROpt(object):
     def __init__(self, regex, callback):
         self.regex = regex
-        self.compiled = self.compile()
+        self.compiled = rcompile(self.regex)
         self.callback = callback
-
-    def compile(self):
-        return rcompile(self.regex)
 
     def matches(self, text):
         match = self.compiled.match(text)
