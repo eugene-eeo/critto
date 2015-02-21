@@ -1,14 +1,14 @@
 class MetaParser(object):
-    defaults = []
+    patterns = []
 
     def __init__(self):
-        self.pats = self.defaults[:]
+        self.patterns = self.patterns[:]
 
     def register(self, ropt):
-        self.pats.insert(0, ropt)
+        self.patterns.insert(0, ropt)
 
     def handle(self, line):
-        for ropt in self.pats:
+        for ropt in self.patterns:
             match = ropt.matches(line)
             if match:
                 return ropt(match)

@@ -4,7 +4,7 @@ from critto.ropt import ROpt
 
 
 class Preprocessor(MetaParser):
-    defaults = [
+    patterns = [
         endif,
         defined,
         cond,
@@ -13,8 +13,7 @@ class Preprocessor(MetaParser):
     ]
 
     def __init__(self, flags, conds):
-        self.defaults = [t.bind(self) for t in self.defaults]
-        MetaParser.__init__(self)
+        self.patterns = [t.bind(self) for t in self.patterns]
         self.flags = flags
         self.conds = conds
         self.stack = [True]
