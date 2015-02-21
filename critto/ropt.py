@@ -20,7 +20,7 @@ class ROpt(object):
         return self.__class__(
             self.regex,
             partial(self.callback, instance),
-        )
+            )
 
 
 def ropt(regex):
