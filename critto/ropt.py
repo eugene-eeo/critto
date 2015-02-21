@@ -10,7 +10,7 @@ class ROpt(object):
 
     def matches(self, text):
         match = self.compiled.match(text)
-        if match and match.end() == len(text):
+        if match and (match.end() - match.start()) == len(text):
             return match
 
     def __call__(self, *args, **kwargs):
