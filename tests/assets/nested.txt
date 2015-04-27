@@ -1,8 +1,8 @@
 #![if cond1=1]
   #![if cond2=0]
 no
-  #![endif]
-#![endif]
+  #![end]
+#![end]
 #![if cond1=null]
 yes
-#![endif]
+#![end]

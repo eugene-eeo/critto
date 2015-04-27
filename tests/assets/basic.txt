@@ -1,4 +1,4 @@
 #![enable]
 #![if cond=true]
 yes
-#![endif]
+#![end]

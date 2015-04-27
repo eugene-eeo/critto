@@ -16,7 +16,7 @@ def scoped(func):
     return function
 
 
-@ropt(tag('endif'))
+@ropt(tag('end'))
 def endif(ctx, _):
     ctx.stack.pop()
 
