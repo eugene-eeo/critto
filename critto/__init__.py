@@ -1,4 +1,4 @@
-from critto.preprocessor import Preprocessor
+from .preprocessor import Preprocessor
 
 
 def expand(text, conds=None, flags=None):

@@ -1,6 +1,6 @@
-from critto.constructs import endif, defined, cond, flag, text
-from critto.meta import MetaParser
-from critto.ropt import ROpt
+from .constructs import endif, defined, cond, flag, text
+from .meta import MetaParser
+from .ropt import ROpt
 
 
 class Preprocessor(MetaParser):

@@ -1,5 +1,5 @@
 from json import loads
-from critto.ropt import ropt
+from .ropt import ropt
 
 
 NAME = r'([A-Za-z_$][\w_-]+)'

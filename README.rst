@@ -12,7 +12,7 @@ given a piece of text:
     #![enable]
     #![if os="posix"]
     code here...
-    #![endif]
+    #![end]
 
 Critto can expand it to the following, if you are running
 a -nix OS, or nothing at all if you are running something
